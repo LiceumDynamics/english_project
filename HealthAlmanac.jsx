@@ -10,8 +10,8 @@ const STYLES = `
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Instrument+Serif:ital@0;1&family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500&display=swap');
 
 .almanac {
-  --bg:#EFE8D8; --paper:#F6F1E2; --ink:#14130F; --ink-soft:#3B3833;
-  --ink-mute:#6E6A60; --rule:#CDC4AE; --accent:#D94B2A; --olive:#515032; --teal:#2E4A48;
+  --bg:#15130D; --paper:#1E1B14; --void:#0C0B07; --ink:#E9E1CE; --ink-soft:#B6AF9D;
+  --ink-mute:#7B7568; --rule:#3A372C; --accent:#E2562E; --olive:#9DA471; --teal:#74AAA2;
   --f-display:'Fraunces',serif; --f-italic:'Instrument Serif',serif;
   --f-body:'DM Sans',system-ui,sans-serif; --f-mono:'JetBrains Mono',ui-monospace,monospace;
   background:var(--bg); color:var(--ink); font-family:var(--f-body); font-size:16px;
@@ -20,20 +20,24 @@ const STYLES = `
 }
 .almanac *, .almanac *::before, .almanac *::after { box-sizing:border-box; margin:0; padding:0; }
 .almanac::before {
-  content:""; position:absolute; inset:0; pointer-events:none; z-index:1; opacity:.35;
-  mix-blend-mode:multiply;
+  content:""; position:absolute; inset:0; pointer-events:none; z-index:1; opacity:.5;
   background-image:
-    radial-gradient(circle at 25% 30%, rgba(20,19,15,.04) 1px, transparent 1px),
-    radial-gradient(circle at 70% 60%, rgba(20,19,15,.05) 1px, transparent 1px),
-    radial-gradient(circle at 50% 80%, rgba(20,19,15,.03) 1px, transparent 1.5px);
+    radial-gradient(circle at 25% 30%, rgba(233,225,206,.04) 1px, transparent 1px),
+    radial-gradient(circle at 70% 60%, rgba(233,225,206,.05) 1px, transparent 1px),
+    radial-gradient(circle at 50% 80%, rgba(233,225,206,.03) 1px, transparent 1.5px);
   background-size:7px 7px,11px 11px,5px 5px;
+}
+.almanac::after {
+  content:""; position:fixed; inset:0; pointer-events:none; z-index:40;
+  background:radial-gradient(ellipse at 50% 40%, transparent 46%, rgba(0,0,0,.6) 100%);
 }
 .almanac > * { position:relative; z-index:2; }
 
 .eyebrow { font-family:var(--f-mono); font-size:11px; letter-spacing:0.22em;
   text-transform:uppercase; color:var(--ink-soft); font-weight:500; }
 .eyebrow .dot { display:inline-block; width:6px; height:6px; background:var(--accent);
-  border-radius:50%; margin:0 .55em .14em .25em; vertical-align:middle; }
+  border-radius:50%; margin:0 .55em .14em .25em; vertical-align:middle;
+  animation:pulse 2.4s ease-in-out infinite; box-shadow:0 0 8px var(--accent); }
 
 .wrap { max-width:1320px; margin:0 auto; padding:0 clamp(1.25rem,3.5vw,3rem); }
 
@@ -45,7 +49,8 @@ const STYLES = `
 .meta-l, .meta-r { font-family:var(--f-mono); font-size:10.5px;
   letter-spacing:0.18em; text-transform:uppercase; color:var(--ink-soft); }
 .meta-r { text-align:right; }
-.meta-r .accent { color:var(--accent); font-weight:500; }
+.meta-r .accent { color:var(--accent); font-weight:500;
+  animation:pulse 2.4s ease-in-out infinite; }
 .brand { font-family:var(--f-display); font-variation-settings:"opsz" 144,"SOFT" 100,"wght" 500;
   font-size:clamp(20px,2.2vw,26px); letter-spacing:-0.025em; text-align:center;
   white-space:nowrap; background:none; border:0; cursor:pointer; color:var(--ink); padding:0; }
@@ -86,7 +91,7 @@ const STYLES = `
   margin-bottom:8px; display:block; }
 
 /* ===== Ticker ===== */
-.ticker { background:var(--ink); color:var(--paper); overflow:hidden; padding:22px 0;
+.ticker { background:var(--void); color:var(--ink); overflow:hidden; padding:22px 0;
   border-top:1px solid var(--ink); border-bottom:1px solid var(--ink); }
 .ticker-track { display:flex; gap:56px; animation:scroll 50s linear infinite;
   white-space:nowrap; width:max-content; }
@@ -98,7 +103,7 @@ const STYLES = `
 .ticker-item .big small { font-size:0.55em; opacity:0.85; }
 .ticker-item .lbl { font-family:var(--f-mono); font-size:11px;
   letter-spacing:0.18em; text-transform:uppercase; opacity:.7; }
-.ticker-item.sep { color:var(--paper); opacity:.35;
+.ticker-item.sep { color:var(--ink); opacity:.35;
   font-family:var(--f-italic); font-style:italic; }
 @keyframes scroll { from { transform:translateX(0); } to { transform:translateX(-50%); } }
 
@@ -128,7 +133,7 @@ const STYLES = `
 .ch-card.a { grid-column:span 7; }
 .ch-card.b { grid-column:span 5; }
 .ch-card.c { grid-column:span 5; }
-.ch-card.d { grid-column:span 7; background:var(--ink); color:var(--paper); }
+.ch-card.d { grid-column:span 7; background:var(--void); color:var(--ink); }
 .ch-card .ch-num { font-family:var(--f-mono); font-size:11px;
   letter-spacing:0.2em; text-transform:uppercase; color:var(--accent); }
 .ch-card .ch-title { font-family:var(--f-display);
@@ -264,19 +269,19 @@ const STYLES = `
 .callout { display:grid; grid-template-columns:auto 1fr;
   gap:clamp(20px,3vw,36px); align-items:end;
   padding:clamp(24px,4vw,40px) clamp(24px,4vw,36px);
-  background:var(--ink); color:var(--paper); margin:32px 0; border:1px solid var(--ink); }
+  background:var(--void); color:var(--ink); margin:32px 0; border:1px solid var(--rule); }
 .callout .big-num { font-family:var(--f-display);
   font-variation-settings:"opsz" 144,"SOFT" 0,"wght" 380;
   font-size:clamp(72px,11vw,144px); line-height:0.82;
   letter-spacing:-0.05em; color:var(--accent); font-weight:380; }
-.callout .big-num small { font-size:0.45em; color:var(--paper);
-  opacity:.7; margin-left:8px; }
+.callout .big-num small { font-size:0.45em; color:var(--ink);
+  opacity:.55; margin-left:8px; }
 .callout .ctx { font-family:var(--f-italic); font-style:italic;
   font-size:clamp(18px,2.2vw,24px); line-height:1.3;
   letter-spacing:-0.01em; max-width:36ch; }
 .callout .ctx .lab { display:block; font-family:var(--f-mono);
   font-size:10.5px; letter-spacing:0.2em; text-transform:uppercase;
-  color:var(--paper); opacity:.55; font-style:normal; margin-bottom:10px; }
+  color:var(--accent); opacity:.9; font-style:normal; margin-bottom:10px; }
 
 /* ===== Compare table ===== */
 .compare { width:100%; border-collapse:collapse;
@@ -285,7 +290,7 @@ const STYLES = `
   vertical-align:top; border-bottom:1px solid var(--rule);
   border-right:1px solid var(--rule); font-size:14.5px; line-height:1.5; }
 .compare th:last-child, .compare td:last-child { border-right:0; }
-.compare thead th { background:var(--ink); color:var(--paper);
+.compare thead th { background:var(--void); color:var(--ink);
   font-family:var(--f-mono); font-size:11px;
   letter-spacing:0.18em; text-transform:uppercase; font-weight:500; }
 .compare thead th em { font-family:var(--f-italic); font-style:italic;
@@ -349,8 +354,8 @@ const STYLES = `
   font-size:clamp(40px,6vw,80px); color:var(--accent); line-height:0.9; }
 
 /* ===== Footer ===== */
-.colophon { border-top:1px solid var(--ink); background:var(--ink);
-  color:var(--paper); padding:clamp(48px,8vw,88px) 0 36px; }
+.colophon { border-top:1px solid var(--ink); background:var(--void);
+  color:var(--ink); padding:clamp(48px,8vw,88px) 0 36px; }
 .colophon-grid { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr;
   gap:40px; align-items:start; padding-bottom:56px;
   border-bottom:1px solid rgba(246,241,226,0.18); }
@@ -360,7 +365,7 @@ const STYLES = `
 .colophon ul { list-style:none; }
 .colophon li { margin-bottom:8px; }
 .colophon a, .colophon button { background:none; border:0;
-  cursor:pointer; color:var(--paper); font-size:15px;
+  cursor:pointer; color:var(--ink); font-size:15px;
   letter-spacing:-0.005em; text-decoration:none; font-family:inherit; padding:0; text-align:left; }
 .colophon a:hover, .colophon button:hover { color:var(--accent); }
 .colophon .brand-mark { font-family:var(--f-display);
@@ -378,6 +383,7 @@ const STYLES = `
 
 /* ===== Animations ===== */
 @keyframes rise { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:translateY(0); } }
+@keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.2; } }
 .rise-1 { animation:rise .9s .05s ease-out both; }
 .rise-2 { animation:rise .9s .2s ease-out both; }
 .rise-3 { animation:rise .9s .35s ease-out both; }
@@ -409,7 +415,7 @@ const STYLES = `
 `;
 
 const NAV = [
-  { id: 'home', num: '00', label: 'Cover' },
+  { id: 'home', num: '00', label: 'Index' },
   { id: 'fitness', num: 'I', label: 'Fitness & Running' },
   { id: 'nutrition', num: 'II', label: 'Diet & Nutrition' },
   { id: 'habits', num: 'III', label: 'Habits & Addictions' },
@@ -422,7 +428,7 @@ function Masthead({ page, go }) {
   return (
     <header className="masthead">
       <div className="masthead-inner">
-        <div className="meta-l">Volume I · Issue 01 · MMXXVI</div>
+        <div className="meta-l">Transmission 01 · MMXXVI · unsigned</div>
         <button className="brand" onClick={() => go('home')} aria-label="Index">
           <svg viewBox="0 0 28 28" width="26" height="26" style={{ display: 'block', margin: '0 auto' }}>
             <circle cx="14" cy="14" r="12.5" fill="none" stroke="currentColor" strokeWidth="1" />
@@ -455,9 +461,15 @@ function Footer({ go }) {
       <div className="wrap">
         <div className="colophon-grid">
           <div>
-            <div className="brand-mark">The Health<br /><em>Almanac.</em></div>
-            <p className="blurb">An editorial field guide to the body and its discontents.
-              Six honest essays. No newsletter, no app, no upsell.</p>
+            <div className="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 60 60" width="56" height="56">
+                <circle cx="30" cy="30" r="27" fill="none" stroke="currentColor" strokeWidth="1.5" />
+                <circle cx="30" cy="30" r="8" fill="var(--accent)" />
+              </svg>
+            </div>
+            <p className="blurb">An unsigned field guide to the body and its
+              discontents. Three chapters. No author, no newsletter, no trace
+              you can follow back.</p>
           </div>
           <div>
             <h4>Chapters</h4>
@@ -468,26 +480,26 @@ function Footer({ go }) {
             </ul>
           </div>
           <div>
-            <h4>The publication</h4>
+            <h4>The record</h4>
             <ul>
-              <li><button onClick={() => go('home')}>Editor's note</button></li>
-              <li><a href="#">Sources &amp; citations</a></li>
-              <li><a href="#">Submit a correction</a></li>
+              <li><button onClick={() => go('home')}>The marginal note</button></li>
+              <li><a href="#">Sources — redacted</a></li>
+              <li><a href="#">Report what you saw</a></li>
             </ul>
           </div>
           <div>
-            <h4>Find us</h4>
+            <h4>Whereabouts</h4>
             <ul>
-              <li><a href="#">In print, quarterly</a></li>
-              <li><a href="#">In your inbox, monthly</a></li>
-              <li><a href="#">On the bedside table</a></li>
+              <li><a href="#">Passed hand to hand</a></li>
+              <li><a href="#">Left where it is found</a></li>
+              <li><a href="#">Never the same address</a></li>
             </ul>
           </div>
         </div>
         <div className="colophon-base">
-          <span>© MMXXVI · The Health Almanac</span>
+          <span>MMXXVI · no rights reserved · no rights claimed</span>
           <span>Set in Fraunces &amp; Instrument Serif</span>
-          <span>Printed on the open web</span>
+          <span>Reader location — logged</span>
         </div>
       </div>
     </footer>
@@ -526,25 +538,25 @@ function Home({ go }) {
       <section className="cover">
         <div className="wrap">
           <div className="cover-row rise-1">
-            <span className="eyebrow"><span className="dot" />The cover essay · No. 01</span>
-            <span className="eyebrow">A six-chapter field guide</span>
+            <span className="eyebrow"><span className="dot" />47.21°N — origin unverified</span>
+            <span className="eyebrow">Read in order · do not skip</span>
           </div>
-          <h1 className="rise-2">Live <em>longer.</em><br />Live louder.<br />Live <em>looking up.</em></h1>
+          <h1 className="rise-2">Six things<br />they would<br /><em>rather</em> you<br /><em>not</em> read.</h1>
           <p className="cover-deck rise-3">
-            A field guide to the body and its discontents — six honest essays on
-            running, eating, drinking, scrolling, and the small choices that quietly
-            decide everything else.
+            An unsigned field guide to the body and the slow arithmetic of every
+            choice you believed was private. No author. No agenda you can name.
+            Only the receipts.
           </p>
           <div className="cover-side rise-4">
             <div>
-              <span className="lab">In this issue</span>
-              The case for forty minutes of running, the cholesterol you wanted versus
-              the one you got, and why your phone is a slot machine you carry on purpose.
+              <span className="lab">Contents — withheld until opened</span>
+              Forty minutes that quietly change a life. The cholesterol you were
+              never shown. The rectangle in your pocket that logs more than you do.
             </div>
             <div>
-              <span className="lab">A note from the editor</span>
-              We are not a clinic. We are not a coach. We are a careful reader, an
-              honest friend, and a stack of well-folded facts — to be unfolded slowly.
+              <span className="lab">If you are asking who wrote this</span>
+              You will not be told. Read the three chapters in sequence, close
+              the tab, and tell no one where you found it.
             </div>
           </div>
         </div>
@@ -567,9 +579,9 @@ function Home({ go }) {
       <section className="chapters">
         <div className="wrap">
           <div className="section-head">
-            <span className="num">§ Contents</span>
-            <h2>Three chapters, six<br />essays, one <em>body.</em></h2>
-            <span className="num">04 · 26 · MMXXVI</span>
+            <span className="num">§ Sealed contents</span>
+            <h2>Three chapters.<br />Open them <em>in order.</em></h2>
+            <span className="num">∴ MMXXVI</span>
           </div>
 
           <div className="chapter-grid">
@@ -602,11 +614,11 @@ function Home({ go }) {
 
             <div className="ch-card d">
               <span className="ch-glyph">∞</span>
-              <span className="ch-num">Appendix · The manifesto</span>
+              <span className="ch-num">Appendix · unfiled</span>
               <p className="ch-blurb">No supplements. No silver bullets. No
-                seven-step morning routines. A short, stubborn statement of what
-                we believe — and why.</p>
-              <h3 className="ch-title">The <em>honest</em><br />almanac</h3>
+                seven-step morning routine. Only a short note, left in the margin
+                by whoever assembled this.</p>
+              <h3 className="ch-title">The note in<br />the <em>margin</em></h3>
               <div className="ch-foot"><span>Read below</span><span className="ch-arrow">↓</span></div>
             </div>
           </div>
@@ -616,15 +628,16 @@ function Home({ go }) {
       <section className="manifesto">
         <div className="wrap manifesto-grid">
           <div>
-            <span className="lab">The editor's note</span>
-            <p>We don't sell anything. We don't track you. We don't want your morning.
-              We just want you to read three chapters — slowly — and maybe go for a walk afterwards.</p>
+            <span className="lab">Marginalia · undated · author unknown</span>
+            <p>There is nothing to buy here and no one to thank. This was left
+              where you would find it. Read it once, in full, and let it become
+              your problem too.</p>
           </div>
           <h3>
             <span className="qm">"</span>The body keeps the receipts.
             Every cigarette, every sleepless night, every <em>scrolled hour</em> —
-            all of it cashed in eventually. The good news is that the body also
-            keeps the <em>deposits.</em><span className="qm">"</span>
+            all of it filed, all of it cashed in. The only secret worth keeping
+            is that the body also keeps the <em>deposits.</em><span className="qm">"</span>
           </h3>
         </div>
       </section>
